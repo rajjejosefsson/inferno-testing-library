@@ -29,7 +29,8 @@
   },
   "files": [
     "dist",
-    "typings"
+    "typings",
+    "cleanup-after-each.js"
   ],
   "keywords": [
     "testing",
@@ -94,7 +95,6 @@
       "jest/globals": true
     },
     "rules": {
-      "import/named": "off",
       "import/no-unassigned-import": "off",
       "react/react-in-jsx-scope": "off",
       "react/prefer-stateless-function": "off",
