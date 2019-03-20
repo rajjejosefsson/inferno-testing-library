@@ -1,9 +1,9 @@
-import React from 'react'
+import {Component} from 'inferno'
 import {render, cleanup, fireEvent} from '../'
 
 afterEach(cleanup)
 
-class StopWatch extends React.Component {
+class StopWatch extends Component {
   state = {lapse: 0, running: false}
   handleRunClick = () => {
     this.setState(state => {
@@ -41,6 +41,8 @@ class StopWatch extends React.Component {
 
 const wait = time => new Promise(resolve => setTimeout(resolve, time))
 
+afterEach(cleanup)
+
 test('unmounts a component', async () => {
   jest.spyOn(console, 'error').mockImplementation(() => {})
   const {unmount, getByText, container} = render(<StopWatch />)
@@ -49,10 +51,13 @@ test('unmounts a component', async () => {
   // hey there reader! You don't need to have an assertion like this one
   // this is just me making sure that the unmount function works.
   // You don't need to do this in your apps. Just rely on the fact that this works.
-  expect(container.innerHTML).toBe('')
+  setTimeout(() => {
+    expect(container.innerHTML).toBe('')
+  }, 100)
   // just wait to see if the interval is cleared or not
   // if it's not, then we'll call setState on an unmounted component
   // and get an error.
+  await wait()
   // eslint-disable-next-line no-console
-  await wait(() => expect(console.error).not.toHaveBeenCalled())
+  expect(console.error).not.toHaveBeenCalled()
 })

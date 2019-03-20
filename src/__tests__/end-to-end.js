@@ -1,5 +1,5 @@
-import React from 'react'
 import {render, wait, cleanup} from '../'
+import {Component} from 'inferno'
 
 afterEach(cleanup)
 
@@ -13,7 +13,7 @@ const fetchAMessage = () =>
     }, randomTimeout)
   })
 
-class ComponentWithLoader extends React.Component {
+class ComponentWithLoader extends Component {
   state = {loading: true}
   async componentDidMount() {
     const data = await fetchAMessage()

@@ -1,5 +1,6 @@
-import React from 'react'
+import {Component, createRef} from 'inferno'
 import {render, cleanup, fireEvent} from '../'
+import {createElement} from 'inferno-create-element'
 
 const eventTypes = [
   {
@@ -42,8 +43,8 @@ const eventTypes = [
     type: 'Mouse',
     events: [
       'click',
+      // 'doubleClick',
       'contextMenu',
-      'doubleClick',
       'drag',
       'dragEnd',
       'dragEnter',
@@ -138,11 +139,11 @@ eventTypes.forEach(({type, events, elementType, init}) => {
       )}`
 
       it(`triggers ${propName}`, () => {
-        const ref = React.createRef()
+        const ref = createRef()
         const spy = jest.fn()
 
         render(
-          React.createElement(elementType, {
+          createElement(elementType, {
             [propName]: spy,
             ref,
           }),
@@ -155,12 +156,12 @@ eventTypes.forEach(({type, events, elementType, init}) => {
   })
 })
 
-test('onChange works', () => {
+test('onInput works', () => {
   const handleChange = jest.fn()
   const {
     container: {firstChild: input},
-  } = render(<input onChange={handleChange} />)
-  fireEvent.change(input, {target: {value: 'a'}})
+  } = render(<input onInput={handleChange} />)
+  fireEvent.input(input, {target: {value: 'a'}})
   expect(handleChange).toHaveBeenCalledTimes(1)
 })
 
@@ -171,6 +172,7 @@ test('calling `fireEvent` directly works too', () => {
   } = render(<button onClick={handleEvent} />)
   fireEvent(
     button,
+    // eslint-disable-next-line no-undef
     new Event('MouseEvent', {
       bubbles: true,
       cancelable: true,
