@@ -1,23 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {
-  getQueriesForElement,
-  prettyDOM,
-  fireEvent as dtlFireEvent,
-} from 'dom-testing-library'
-import act from './act-compat'
+import {getQueriesForElement, prettyDOM} from 'dom-testing-library'
+import {render as renderWithInferno} from 'inferno'
+import {createElement} from 'inferno-create-element'
 
 const mountedContainers = new Set()
 
 function render(
   ui,
-  {
-    container,
-    baseElement = container,
-    queries,
-    hydrate = false,
-    wrapper: WrapperComponent,
-  } = {},
+  {container, baseElement = container, queries, wrapper: WrapperComponent} = {},
 ) {
   if (!container) {
     // default to document.body instead of documentElement to avoid output of potentially-large
@@ -33,23 +22,17 @@ function render(
 
   const wrapUiIfNeeded = innerElement =>
     WrapperComponent
-      ? React.createElement(WrapperComponent, null, innerElement)
+      ? createElement(WrapperComponent, null, innerElement)
       : innerElement
 
-  act(() => {
-    if (hydrate) {
-      ReactDOM.hydrate(wrapUiIfNeeded(ui), container)
-    } else {
-      ReactDOM.render(wrapUiIfNeeded(ui), container)
-    }
-  })
+  renderWithInferno(wrapUiIfNeeded(ui), container)
 
   return {
     container,
     baseElement,
     // eslint-disable-next-line no-console
     debug: (el = baseElement) => console.log(prettyDOM(el)),
-    unmount: () => ReactDOM.unmountComponentAtNode(container),
+    unmount: () => renderWithInferno(null, container.$V),
     rerender: rerenderUi => {
       render(wrapUiIfNeeded(rerenderUi), {container, baseElement})
       // Intentionally do not return anything to avoid unnecessarily complicating the API.
@@ -81,56 +64,13 @@ function cleanupAtContainer(container) {
   if (container.parentNode === document.body) {
     document.body.removeChild(container)
   }
-  ReactDOM.unmountComponentAtNode(container)
+
+  renderWithInferno(null, container.$V)
   mountedContainers.delete(container)
-}
-
-// react-testing-library's version of fireEvent will call
-// dom-testing-library's version of fireEvent wrapped inside
-// an "act" call so that after all event callbacks have been
-// been called, the resulting useEffect callbacks will also
-// be called.
-function fireEvent(...args) {
-  let returnValue
-  act(() => {
-    returnValue = dtlFireEvent(...args)
-  })
-  return returnValue
-}
-
-Object.keys(dtlFireEvent).forEach(key => {
-  fireEvent[key] = (...args) => {
-    let returnValue
-    act(() => {
-      returnValue = dtlFireEvent[key](...args)
-    })
-    return returnValue
-  }
-})
-
-// React event system tracks native mouseOver/mouseOut events for
-// running onMouseEnter/onMouseLeave handlers
-// @link https://github.com/facebook/react/blob/b87aabdfe1b7461e7331abb3601d9e6bb27544bc/packages/react-dom/src/events/EnterLeaveEventPlugin.js#L24-L31
-fireEvent.mouseEnter = fireEvent.mouseOver
-fireEvent.mouseLeave = fireEvent.mouseOut
-
-fireEvent.select = (node, init) => {
-  // React tracks this event only on focused inputs
-  node.focus()
-
-  // React creates this event when one of the following native events happens
-  // - contextMenu
-  // - mouseUp
-  // - dragEnd
-  // - keyUp
-  // - keyDown
-  // so we can use any here
-  // @link https://github.com/facebook/react/blob/b87aabdfe1b7461e7331abb3601d9e6bb27544bc/packages/react-dom/src/events/SelectEventPlugin.js#L203-L224
-  fireEvent.keyUp(node, init)
 }
 
 // just re-export everything from dom-testing-library
 export * from 'dom-testing-library'
-export {render, cleanup, fireEvent, act}
+export {render, cleanup}
 
 /* eslint func-name-matching:0 */

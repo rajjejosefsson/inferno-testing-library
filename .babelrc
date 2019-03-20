@@ -1,0 +1,16 @@
+{
+  "env": {
+    "test": {
+      "plugins": [
+        "@babel/plugin-transform-react-jsx",
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-proposal-object-rest-spread",
+      ],
+      "presets": [
+        "@babel/preset-env"
+      ]
+    }
+  },
+  "presets": ["kcd-scripts/babel"],
+  "plugins": [["babel-plugin-inferno", {"imports": true}]],
+}

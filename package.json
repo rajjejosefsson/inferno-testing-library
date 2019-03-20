@@ -1,35 +1,39 @@
 {
-  "name": "react-testing-library",
-  "version": "0.0.0-semantically-released",
-  "description": "Simple and complete React DOM testing utilities that encourage good testing practices.",
+  "name": "inferno-testing-library",
+  "version": "0.0.1",
+  "description": "Simple and complete Inferno DOM testing utilities that encourage good testing practices.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rajjejosefsson/inferno-testing-library"
+  },
+  "bugs": {
+    "url": "https://github.com/rajjejosefsson/inferno-testing-library/issues"
+  },
+  "homepage": "https://github.com/rajjejosefsson/inferno-testing-libraryy#readme",
   "main": "dist/index.js",
-  "module": "dist/react-testing-library.esm.js",
   "typings": "typings/index.d.ts",
   "engines": {
     "node": ">=8"
   },
   "scripts": {
     "add-contributor": "kcd-scripts contributors add",
-    "build": "kcd-scripts build && kcd-scripts build --bundle --no-clean",
+    "build": "kcd-scripts build",
     "lint": "kcd-scripts lint",
-    "test": "kcd-scripts test --config=other/jest.config.js",
+    "test": "kcd-scripts test",
     "test:update": "npm test -- --updateSnapshot --coverage",
     "validate": "kcd-scripts validate",
-    "setup": "npm install && npm run validate -s"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "kcd-scripts pre-commit"
-    }
+    "setup": "npm install && npm run validate -s",
+    "precommit": "kcd-scripts precommit",
+    "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "files": [
     "dist",
-    "typings",
-    "cleanup-after-each.js"
+    "typings"
   ],
   "keywords": [
     "testing",
-    "react",
+    "inferno",
     "ui",
     "dom",
     "jsdom",
@@ -39,53 +43,74 @@
     "end-to-end",
     "e2e"
   ],
-  "author": "Kent C. Dodds <kent@doddsfamily.us> (http://kentcdodds.com/)",
+  "author": "Rasmus Josefsson <rajjejosefsson@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime": "^7.3.1",
-    "dom-testing-library": "^3.13.1"
+    "@babel/runtime": "^7.1.5",
+    "babel-plugin-module-resolver": "^2.7.1",
+    "dom-testing-library": "^3.12.0",
+    "jest-dom": "^2.1.0",
+    "wait-for-expect": "0.4.0"
   },
   "devDependencies": {
-    "@reach/router": "^1.2.1",
-    "@types/react": "^16.8.3",
-    "@types/react-dom": "^16.8.2",
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-react-jsx": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
     "axios": "^0.18.0",
-    "eslint-import-resolver-jest": "^2.1.1",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^23.6.0",
+    "babel-plugin-inferno": "^6.0.5",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jest": "^21.26.2",
+    "eslint-plugin-node": "^8.0.0",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-standard": "^4.0.0",
     "history": "^4.7.2",
-    "jest-dom": "3.0.1",
+    "inferno": "^7.1.10",
+    "inferno-create-element": "^7.1.10",
+    "inferno-css-transition-group": "^4.0.0",
+    "inferno-redux": "^7.1.10",
+    "inferno-router": "^7.1.10",
     "jest-in-case": "^1.0.2",
-    "kcd-scripts": "0.49.0",
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0",
-    "react-redux": "6.0.0",
-    "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1",
-    "react-transition-group": "^2.5.0",
-    "redux": "^4.0.0"
-  },
-  "peerDependencies": {
-    "react": "*",
-    "react-dom": "*"
+    "jsdom": "11.11.0",
+    "kcd-scripts": "^0.45.0",
+    "redux": "^3.7.2",
+    "semantic-release": "^15.5.1",
+    "travis-deploy-once": "^5.0.0"
   },
   "eslintConfig": {
-    "extends": "./node_modules/kcd-scripts/eslint.js",
+    "parser": "babel-eslint",
+    "extends": [
+      "standard"
+    ],
+    "plugins": [
+      "jest"
+    ],
+    "env": {
+      "jest/globals": true
+    },
     "rules": {
-      "react/prop-types": "off",
+      "import/named": "off",
       "import/no-unassigned-import": "off",
-      "import/named": "off"
+      "react/react-in-jsx-scope": "off",
+      "react/prefer-stateless-function": "off",
+      "react/prop-types": "off",
+      "no-empty-pattern": "off",
+      "space-before-function-paren": "off",
+      "comma-dangle": "off",
+      "object-curly-spacing": "off",
+      "jsx-quotes": "off",
+      "spaced-comment": "off",
+      "no-unused-vars": "off"
     }
   },
   "eslintIgnore": [
     "node_modules",
     "coverage",
     "dist"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kentcdodds/react-testing-library.git"
-  },
-  "bugs": {
-    "url": "https://github.com/kentcdodds/react-testing-library/issues"
-  },
-  "homepage": "https://github.com/kentcdodds/react-testing-library#readme"
+  ]
 }

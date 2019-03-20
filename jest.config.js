@@ -1,5 +1,8 @@
-const jestConfig = require('kcd-scripts/jest')
-
+const {jest: jestConfig} = require('kcd-scripts/config')
 module.exports = Object.assign(jestConfig, {
-  displayName: 'library',
+  transform: {
+    '^.+\\.jsx?$': 'babel-jest',
+  },
+  testEnvironment: 'jsdom',
+  moduleFileExtensions: ['js', 'jsx'],
 })

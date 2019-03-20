@@ -1,13 +1,14 @@
 import React from 'react'
 import axiosMock from 'axios'
 import {render, fireEvent, cleanup, wait} from '../'
+import {Component} from 'inferno'
 
 afterEach(cleanup)
 
 // instead of importing it, we'll define it inline here
 // import Fetch from '../fetch'
 
-class Fetch extends React.Component {
+class Fetch extends Component {
   state = {}
   componentDidUpdate(prevProps) {
     if (this.props.url !== prevProps.url) {
