@@ -1,4 +1,3 @@
-import React from 'react'
 import axiosMock from 'axios'
 import {render, fireEvent, cleanup, wait} from '../'
 import {Component} from 'inferno'
